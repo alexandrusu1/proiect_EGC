@@ -1,0 +1,139 @@
+[gd_scene load_steps=12 format=3 uid="uid://cashgotxn8mk8"]
+
+[ext_resource type="Texture2D" uid="uid://dvt1wsjhrlbg6" path="res://Assets/rocky_terrain_diff_4k.jpg" id="1_0xm2m"]
+[ext_resource type="Script" uid="uid://b22vpkdb0t3ku" path="res://player.gd" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://d4knlelgiiuwn" path="res://Assets/low_poly_trees_free.glb" id="3_h2yge"]
+[ext_resource type="Script" uid="uid://1xej2u2rjch2" path="res://canvas_layer.gd" id="4_lquwl"]
+[ext_resource type="FontFile" uid="uid://c7ic2xtxu0saj" path="res://Assets/Blood Victim Zombie.ttf" id="5_7mycd"]
+
+[sub_resource type="Sky" id="Sky_0xm2m"]
+
+[sub_resource type="Environment" id="Environment_h2yge"]
+background_mode = 2
+background_energy_multiplier = 0.1
+sky = SubResource("Sky_0xm2m")
+tonemap_mode = 2
+fog_enabled = true
+fog_density = 0.05
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.02
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h2yge"]
+albedo_texture = ExtResource("1_0xm2m")
+uv1_triplanar = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1bvp3"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0xm2m"]
+radius = 0.15631104
+height = 0.31262207
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_h2yge"]
+
+[node name="Main" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_h2yge")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.87511003, 0.48392403, 0, 0.010058569, -0.018189536, 0.99978393, 0.48381948, -0.87492096, -0.020785429, 0, 1.1701496, 0)
+light_color = Color(0.0011271259, 0.076737575, 0.42307687, 1)
+light_energy = 0.1
+shadow_enabled = true
+
+[node name="Road" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.7445068)
+use_collision = true
+size = Vector3(10, 0.1, 100)
+material = SubResource("StandardMaterial3D_h2yge")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Crosshair" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dot" type="Label" parent="HUD/Crosshair"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 22
+text = "."
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(0.1, 0, 0, 0, 10, 0, 0, 0, 150, -1.9436836, 4, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_1bvp3")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="."]
+transform = Transform3D(0.1, 0, 0, 0, 10, 0, 0, 0, 150, 2.011612, 4, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D2"]
+shape = SubResource("BoxShape3D_1bvp3")
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("3_h2yge")]
+transform = Transform3D(3.785, 0, 0, 0, 3.785, 0, 0, 0, 3.785, -4.4804463, 0.06832397, 45.975056)
+
+[node name="Sketchfab_Scene2" parent="." instance=ExtResource("3_h2yge")]
+transform = Transform3D(3.785, 0, 0, 0, 3.785, 0, 0, 0, 3.785, -2.5734074, 0.06832397, 45.975056)
+
+[node name="Sketchfab_Scene3" parent="." instance=ExtResource("3_h2yge")]
+transform = Transform3D(-1.654476e-07, 0, 3.785, 0, 3.785, 0, -3.785, 0, -1.654476e-07, -3.1106322, 0.06832397, 42.37537)
+
+[node name="Sketchfab_Scene4" parent="." instance=ExtResource("3_h2yge")]
+transform = Transform3D(-1.654476e-07, 0, 3.785, 0, 3.785, 0, -3.785, 0, -1.654476e-07, -2.5734074, 0.06832397, 44.20366)
+
+[node name="Sketchfab_Scene5" parent="." instance=ExtResource("3_h2yge")]
+transform = Transform3D(-1.654476e-07, 0, 3.785, 0, 3.785, 0, -3.785, 0, -1.654476e-07, 2.511192, 0.06832397, 42.37537)
+
+[node name="Sketchfab_Scene6" parent="." instance=ExtResource("3_h2yge")]
+transform = Transform3D(-1.654476e-07, 0, 3.785, 0, 3.785, 0, -3.785, 0, -1.654476e-07, 3.0484169, 0.06832397, 44.20366)
+
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9934317, 43.33341)
+script = ExtResource("1_ig7tw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = SubResource("CapsuleShape3D_0xm2m")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+mesh = SubResource("CapsuleMesh_h2yge")
+
+[node name="Camera3D" type="Camera3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.64238524, 0)
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Player/Camera3D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+offset = Vector2(180, 0)
+transform = Transform2D(1, 0, 0, 1, 180, 0)
+script = ExtResource("4_lquwl")
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -311.0
+offset_top = -38.0
+offset_right = 528.0
+offset_bottom = 151.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.25490198, 0, 1)
+theme_override_fonts/font = ExtResource("5_7mycd")
+theme_override_font_sizes/font_size = 20
+text = "Ca sa scapi trebuie sa treci toate
+                 restantele"
