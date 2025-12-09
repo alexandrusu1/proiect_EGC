@@ -1,10 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://cashgotxn8mk8"]
+[gd_scene load_steps=16 format=3 uid="uid://cashgotxn8mk8"]
 
 [ext_resource type="Texture2D" uid="uid://dvt1wsjhrlbg6" path="res://Assets/rocky_terrain_diff_4k.jpg" id="1_0xm2m"]
 [ext_resource type="Script" uid="uid://b22vpkdb0t3ku" path="res://player.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://2hitdsd7krod" path="res://sub_viewport_container.gd" id="2_272bh"]
 [ext_resource type="PackedScene" uid="uid://d4knlelgiiuwn" path="res://Assets/low_poly_trees_free.glb" id="3_h2yge"]
 [ext_resource type="Script" uid="uid://1xej2u2rjch2" path="res://canvas_layer.gd" id="4_lquwl"]
 [ext_resource type="FontFile" uid="uid://c7ic2xtxu0saj" path="res://Assets/Blood Victim Zombie.ttf" id="5_7mycd"]
+[ext_resource type="PackedScene" uid="uid://cvoxcig6nihon" path="res://Assets/Running.fbx" id="6_5vw27"]
+[ext_resource type="Script" uid="uid://iq61ralh1o0b" path="res://inamic.gd" id="6_7mycd"]
 
 [sub_resource type="Sky" id="Sky_0xm2m"]
 
@@ -18,17 +21,19 @@ fog_density = 0.05
 volumetric_fog_enabled = true
 volumetric_fog_density = 0.02
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_1bvp3"]
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h2yge"]
 albedo_texture = ExtResource("1_0xm2m")
 uv1_triplanar = true
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_1bvp3"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0xm2m"]
 radius = 0.15631104
 height = 0.31262207
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_h2yge"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5vw27"]
 
 [node name="Main" type="Node3D"]
 
@@ -40,12 +45,6 @@ transform = Transform3D(0.87511003, 0.48392403, 0, 0.010058569, -0.018189536, 0.
 light_color = Color(0.0011271259, 0.076737575, 0.42307687, 1)
 light_energy = 0.1
 shadow_enabled = true
-
-[node name="Road" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.7445068)
-use_collision = true
-size = Vector3(10, 0.1, 100)
-material = SubResource("StandardMaterial3D_h2yge")
 
 [node name="HUD" type="CanvasLayer" parent="."]
 
@@ -64,9 +63,18 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Dot" type="Label" parent="HUD/Crosshair"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -15.5
+offset_right = 20.0
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_font_sizes/font_size = 22
 text = "."
 
@@ -100,20 +108,109 @@ transform = Transform3D(-1.654476e-07, 0, 3.785, 0, 3.785, 0, -3.785, 0, -1.6544
 [node name="Sketchfab_Scene6" parent="." instance=ExtResource("3_h2yge")]
 transform = Transform3D(-1.654476e-07, 0, 3.785, 0, 3.785, 0, -3.785, 0, -1.654476e-07, 3.0484169, 0.06832397, 44.20366)
 
-[node name="Player" type="CharacterBody3D" parent="."]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch = true
+stretch_shrink = 5
+script = ExtResource("2_272bh")
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(256, 144)
+render_target_update_mode = 4
+
+[node name="Road" type="CSGBox3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.7445068)
+use_collision = true
+size = Vector3(10, 0.1, 100)
+material = SubResource("StandardMaterial3D_h2yge")
+
+[node name="Player" type="CharacterBody3D" parent="SubViewportContainer/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9934317, 43.33341)
 script = ExtResource("1_ig7tw")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/Player"]
 shape = SubResource("CapsuleShape3D_0xm2m")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Player"]
 mesh = SubResource("CapsuleMesh_h2yge")
 
-[node name="Camera3D" type="Camera3D" parent="Player"]
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport/Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.64238524, 0)
 
-[node name="SpotLight3D" type="SpotLight3D" parent="Player/Camera3D"]
+[node name="SpotLight3D" type="SpotLight3D" parent="SubViewportContainer/SubViewport/Player/Camera3D"]
+
+[node name="Inamic" type="CharacterBody3D" parent="SubViewportContainer/SubViewport" node_paths=PackedStringArray("player_target")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.116511375, 0)
+script = ExtResource("6_7mycd")
+player_target = NodePath("../Player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/Inamic"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 1.0767237, 0)
+shape = SubResource("CapsuleShape3D_5vw27")
+
+[node name="Running" parent="SubViewportContainer/SubViewport/Inamic" instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.20465839, 0)
+
+[node name="Skeleton3D" parent="SubViewportContainer/SubViewport/Inamic/Running" index="0"]
+bones/0/position = Vector3(0.0017634949, 1.0433072, 3.6403692)
+bones/0/rotation = Quaternion(0.046827946, 0.02681975, -0.024675922, 0.9982379)
+bones/1/rotation = Quaternion(0.051821224, 0.011061692, 0.0121211875, 0.99852157)
+bones/2/rotation = Quaternion(0.08564812, 0.02333451, 0.016676417, 0.99591255)
+bones/3/rotation = Quaternion(0.078159176, 0.023188315, 0.016879123, 0.9965283)
+bones/4/rotation = Quaternion(-0.065244325, -0.027630731, -0.0019907434, 0.99748474)
+bones/5/rotation = Quaternion(-0.11944655, -0.06924847, -0.037521984, 0.9897117)
+bones/9/rotation = Quaternion(-0.50711226, -0.5049034, 0.6106474, -0.33914545)
+bones/10/rotation = Quaternion(0.4692674, 0.13192026, -0.100043595, 0.8673965)
+bones/11/rotation = Quaternion(0.068558946, 0.06994405, 0.78452873, 0.61230904)
+bones/12/rotation = Quaternion(-0.006246189, 0.09699423, 0.1768257, 0.97943145)
+bones/13/rotation = Quaternion(0.25832272, 0.044243358, 0.3240104, 0.90902656)
+bones/14/rotation = Quaternion(0.0027085445, -0.0013506403, -0.13091081, 0.9913895)
+bones/17/rotation = Quaternion(0.6273046, 0.0001280737, 0.062071268, 0.7762964)
+bones/18/rotation = Quaternion(0.6797962, -0.014184976, 0.06297739, 0.7305544)
+bones/21/rotation = Quaternion(0.65131557, -0.01009621, 0.0525365, 0.7569189)
+bones/22/rotation = Quaternion(0.6390074, -0.004232503, 0.06465954, 0.76646644)
+bones/25/rotation = Quaternion(0.67977786, -0.05017714, -0.007320221, 0.731663)
+bones/26/rotation = Quaternion(0.6585653, 0.0046594744, 0.045836385, 0.75111204)
+bones/27/rotation = Quaternion(-2.8327117e-15, 9.851419e-11, 1.9515937e-07, 1)
+bones/29/rotation = Quaternion(0.71350896, -0.08769369, -0.045968205, 0.69361496)
+bones/30/rotation = Quaternion(0.7184101, 0.028784648, 0.04822359, 0.693349)
+bones/31/rotation = Quaternion(3.7916925e-07, 4.2633227e-11, -1.04243725e-07, 1)
+bones/33/rotation = Quaternion(0.5336912, -0.4864613, 0.59150755, 0.35867518)
+bones/34/rotation = Quaternion(0.4016491, -0.052274358, -0.029932112, 0.9138105)
+bones/35/rotation = Quaternion(0.04852211, -0.00965186, -0.70036906, 0.7120643)
+bones/36/rotation = Quaternion(0.020990677, 0.0035942898, -0.05017839, 0.9985132)
+bones/37/rotation = Quaternion(0.27998438, -0.06780924, -0.2741842, 0.91751504)
+bones/38/rotation = Quaternion(-0.0007978507, 0.0009967171, 0.10665178, 0.9942956)
+bones/39/rotation = Quaternion(3.2235281e-09, 7.1272225e-08, 2.690447e-07, 1)
+bones/41/rotation = Quaternion(0.5938899, -0.03970136, -0.0035220587, 0.80355847)
+bones/42/rotation = Quaternion(0.7181603, 0.015272292, -0.05293022, 0.69369376)
+bones/45/rotation = Quaternion(0.629646, 0.0032629939, -0.026268044, 0.7764311)
+bones/46/rotation = Quaternion(0.6793673, 0.0045886887, -0.055681113, 0.7316684)
+bones/49/rotation = Quaternion(0.6788943, 0.040816545, -0.0012734586, 0.73309964)
+bones/50/rotation = Quaternion(0.695577, -0.0044642505, -0.064958125, 0.71549505)
+bones/51/rotation = Quaternion(-4.3556334e-08, -9.328431e-08, 4.679132e-07, 1)
+bones/53/rotation = Quaternion(0.7549188, 0.07468596, 0.01736041, 0.6513205)
+bones/54/rotation = Quaternion(0.7500956, -0.030449072, -0.08894841, 0.6546126)
+bones/55/rotation = Quaternion(3.2561368e-07, 7.1860546e-13, -2.2433967e-12, 1)
+bones/57/rotation = Quaternion(0.043695286, 0.4685787, 0.88194346, 0.02646712)
+bones/58/rotation = Quaternion(-0.81223047, -0.048494782, 0.10643559, 0.5714906)
+bones/59/rotation = Quaternion(0.5433849, 0.033423975, 0.057924807, 0.8368156)
+bones/60/rotation = Quaternion(0.28227568, -0.048326366, -0.040455002, 0.95726085)
+bones/62/rotation = Quaternion(-0.04482905, 0.23830128, 0.9691728, -0.043669026)
+bones/63/rotation = Quaternion(-0.47533065, -0.004343947, -0.012897845, 0.879702)
+bones/64/rotation = Quaternion(0.668604, -0.008099356, -0.012966014, 0.7434615)
+bones/65/rotation = Quaternion(0.3610352, -0.053562723, 0.100470304, 0.9255757)
+
+[node name="AnimationPlayer" parent="SubViewportContainer/SubViewport/Inamic/Running" index="1"]
+autoplay = "mixamo_com"
+speed_scale = 0.175
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 offset = Vector2(180, 0)
@@ -126,14 +223,16 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -311.0
-offset_top = -38.0
-offset_right = 528.0
-offset_bottom = 151.0
+offset_left = -547.0
+offset_top = -74.0
+offset_right = 157.0
+offset_bottom = 113.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.25490198, 0, 1)
 theme_override_fonts/font = ExtResource("5_7mycd")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 60
 text = "Ca sa scapi trebuie sa treci toate
                  restantele"
+
+[editable path="SubViewportContainer/SubViewport/Inamic/Running"]
