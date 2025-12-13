@@ -10,9 +10,9 @@ extends CanvasLayer
 var player: CharacterBody3D
 
 func _ready():
+	await get_tree().process_frame
 	setup_ui()
 	connect_signals()
-	await get_tree().process_frame
 	find_player()
 
 func setup_ui():

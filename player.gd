@@ -39,9 +39,6 @@ func _input(event):
 		camera.rotate_x(-event.relative.y * SENZITIVITATE)
 		camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(-90), deg_to_rad(90))
 
-	if event.is_action_pressed("ui_cancel"):
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-
 func _physics_process(delta):
 	update_dash_cooldown(delta)
 	update_stamina(delta)

@@ -404,3 +404,5 @@ light_energy = 2.0
 omni_range = 10.0
 
 [editable path="SubViewportContainer/SubViewport/Inamic/Running"]
+[editable path="SubViewportContainer/SubViewport/Inamic2/Running"]
+[editable path="SubViewportContainer/SubViewport/Inamic3/Running"]

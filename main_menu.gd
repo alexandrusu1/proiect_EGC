@@ -4,7 +4,7 @@ extends Control
 @onready var title_label: Label
 @onready var start_button: Button
 @onready var settings_button: Button
-@antml:parameter name="quit_button">: Button
+@onready var quit_button: Button
 @onready var best_score_label: Label
 
 func _ready():

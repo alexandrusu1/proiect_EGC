@@ -62,9 +62,10 @@ func create_spacer(height: float) -> Control:
 	spacer.custom_minimum_size = Vector2(0, height)
 	return spacer
 
-func _input(event):
-	if event.is_action_pressed("ui_cancel"):
+func _unhandled_input(event):
+	if event.is_action_pressed("ui_cancel") and not event.is_echo():
 		toggle_pause()
+		get_viewport().set_input_as_handled()
 
 func toggle_pause():
 	is_paused = !is_paused
