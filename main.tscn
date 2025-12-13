@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cashgotxn8mk8"]
+[gd_scene load_steps=20 format=3 uid="uid://cashgotxn8mk8"]
 
 [ext_resource type="Texture2D" uid="uid://dvt1wsjhrlbg6" path="res://Assets/rocky_terrain_diff_4k.jpg" id="1_0xm2m"]
 [ext_resource type="Script" uid="uid://b22vpkdb0t3ku" path="res://player.gd" id="1_ig7tw"]
@@ -8,6 +8,10 @@
 [ext_resource type="FontFile" uid="uid://c7ic2xtxu0saj" path="res://Assets/Blood Victim Zombie.ttf" id="5_7mycd"]
 [ext_resource type="PackedScene" uid="uid://cvoxcig6nihon" path="res://Assets/Running.fbx" id="6_5vw27"]
 [ext_resource type="Script" uid="uid://iq61ralh1o0b" path="res://inamic.gd" id="6_7mycd"]
+[ext_resource type="Script" path="res://hud.gd" id="9_new"]
+[ext_resource type="Script" path="res://collectible.gd" id="10_new"]
+[ext_resource type="Script" path="res://pause_menu.gd" id="11_new"]
+[ext_resource type="Script" path="res://game_over.gd" id="12_new"]
 
 [sub_resource type="Sky" id="Sky_0xm2m"]
 
@@ -16,10 +20,20 @@ background_mode = 2
 background_energy_multiplier = 0.1
 sky = SubResource("Sky_0xm2m")
 tonemap_mode = 2
+glow_enabled = true
+glow_intensity = 0.8
+glow_strength = 1.2
+glow_blend_mode = 0
 fog_enabled = true
-fog_density = 0.05
+fog_density = 0.08
+fog_light_color = Color(0.5, 0.6, 0.7, 1)
 volumetric_fog_enabled = true
-volumetric_fog_density = 0.02
+volumetric_fog_density = 0.03
+volumetric_fog_albedo = Color(0.5, 0.6, 0.7, 1)
+adjustment_enabled = true
+adjustment_brightness = 0.9
+adjustment_contrast = 1.1
+adjustment_saturation = 0.95
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1bvp3"]
 
@@ -90,6 +104,24 @@ transform = Transform3D(0.1, 0, 0, 0, 10, 0, 0, 0, 150, 2.011612, 4, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D2"]
 shape = SubResource("BoxShape3D_1bvp3")
 
+[node name="StaticBody3D3" type="StaticBody3D" parent="."]
+transform = Transform3D(5, 0, 0, 0, 3, 0, 0, 0, 0.5, -3, 1.5, 15)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D3"]
+shape = SubResource("BoxShape3D_1bvp3")
+
+[node name="StaticBody3D4" type="StaticBody3D" parent="."]
+transform = Transform3D(5, 0, 0, 0, 3, 0, 0, 0, 0.5, 3, 1.5, 25)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D4"]
+shape = SubResource("BoxShape3D_1bvp3")
+
+[node name="StaticBody3D5" type="StaticBody3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 3, 0, 0, 0, 5, 0, 1.5, 35)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D5"]
+shape = SubResource("BoxShape3D_1bvp3")
+
 [node name="Sketchfab_Scene" parent="." instance=ExtResource("3_h2yge")]
 transform = Transform3D(3.785, 0, 0, 0, 3.785, 0, 0, 0, 3.785, -4.4804463, 0.06832397, 45.975056)
 
@@ -146,7 +178,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.64238524, 0)
 
 [node name="SpotLight3D" type="SpotLight3D" parent="SubViewportContainer/SubViewport/Player/Camera3D"]
 
-[node name="Inamic" type="CharacterBody3D" parent="SubViewportContainer/SubViewport" node_paths=PackedStringArray("player_target")]
+[node name="Inamic" type="CharacterBody3D" parent="SubViewportContainer/SubViewport" node_paths=PackedStringArray("player_target") groups=["enemy"]]
 transform = Transform3D(-0.99844074, 0, 0.05582139, 0, 1, 0, -0.05582139, 0, -0.99844074, 0, -0.15260795, 0)
 script = ExtResource("6_7mycd")
 player_target = NodePath("../Player")
@@ -287,5 +319,88 @@ theme_override_fonts/font = ExtResource("5_7mycd")
 theme_override_font_sizes/font_size = 60
 text = "Ca sa scapi trebuie sa treci toate
                  restantele"
+
+[node name="GameHUD" type="CanvasLayer" parent="."]
+script = ExtResource("9_new")
+
+[node name="PauseMenu" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("11_new")
+
+[node name="GameOverScreen" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("12_new")
+
+[node name="Collectible1" type="Area3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 1, 10)
+script = ExtResource("10_new")
+
+[node name="Collectible2" type="Area3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1, 15)
+script = ExtResource("10_new")
+
+[node name="Collectible3" type="Area3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1, 20)
+script = ExtResource("10_new")
+
+[node name="Collectible4" type="Area3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1, 25)
+script = ExtResource("10_new")
+
+[node name="Collectible5" type="Area3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 30)
+script = ExtResource("10_new")
+
+[node name="Inamic2" type="CharacterBody3D" parent="SubViewportContainer/SubViewport" node_paths=PackedStringArray("player_target") groups=["enemy"]]
+transform = Transform3D(-0.99844074, 0, 0.05582139, 0, 1, 0, -0.05582139, 0, -0.99844074, 5, -0.15260795, 15)
+script = ExtResource("6_7mycd")
+player_target = NodePath("../Player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/Inamic2"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 1.0767237, 0)
+shape = SubResource("CapsuleShape3D_5vw27")
+
+[node name="Running" parent="SubViewportContainer/SubViewport/Inamic2" instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.20465839, 0)
+
+[node name="Inamic3" type="CharacterBody3D" parent="SubViewportContainer/SubViewport" node_paths=PackedStringArray("player_target") groups=["enemy"]]
+transform = Transform3D(-0.99844074, 0, 0.05582139, 0, 1, 0, -0.05582139, 0, -0.99844074, -5, -0.15260795, 20)
+script = ExtResource("6_7mycd")
+player_target = NodePath("../Player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/Inamic3"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 1.0767237, 0)
+shape = SubResource("CapsuleShape3D_5vw27")
+
+[node name="Running" parent="SubViewportContainer/SubViewport/Inamic3" instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.20465839, 0)
+
+[node name="PointLight1" type="OmniLight3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 3, 10)
+light_color = Color(1, 0.7, 0.4, 1)
+light_energy = 2.0
+omni_range = 10.0
+
+[node name="PointLight2" type="OmniLight3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 3, 20)
+light_color = Color(1, 0.7, 0.4, 1)
+light_energy = 2.0
+omni_range = 10.0
+
+[node name="PointLight3" type="OmniLight3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 30)
+light_color = Color(1, 0.7, 0.4, 1)
+light_energy = 2.0
+omni_range = 10.0
 
 [editable path="SubViewportContainer/SubViewport/Inamic/Running"]
