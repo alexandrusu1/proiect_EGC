@@ -47,8 +47,5 @@ func _process(delta):
 func _on_body_entered(body):
 	if body.has_method("add_stamina"):
 		GameManager.collect_item(global_position)
-		
-		if body.has_method("add_stamina"):
-			body.add_stamina(STAMINA_BONUS)
-		
+		body.add_stamina(STAMINA_BONUS)
 		queue_free()

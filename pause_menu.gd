@@ -5,7 +5,6 @@ var is_paused = false
 @onready var panel: Panel
 @onready var resume_button: Button
 @onready var restart_button: Button
-@onready var main_menu_button: Button
 @onready var quit_button: Button
 
 func _ready():
